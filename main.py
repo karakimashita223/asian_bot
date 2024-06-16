@@ -71,7 +71,6 @@ def schedule_next_image():
 
     schedule_time_str = next_time.strftime("%H:%M")
     schedule.every().day.at(schedule_time_str).do(send_random_image).tag('daily-task')
-    bot.send_message(scheduled_chat_id, f"Следующая картинка будет отправлена в {schedule_time_str}.")
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -80,7 +79,6 @@ def send_welcome(message):
             global scheduled_chat_id
             scheduled_chat_id = message.chat.id
             bot.reply_to(message, "Починаю постити дівок❤️")
-            bot.send_message(scheduled_chat_id, f"Следующая картинка будет отправлена в {schedule_time_str}.")
             schedule_next_image()
         else:
             bot.reply_to(message, "ідінахуй @username.")
