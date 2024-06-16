@@ -7,8 +7,8 @@ import time
 import schedule
 from datetime import datetime, timedelta
 
-TOKEN = os.getenv('TELEGRAM_TOKEN')
-WEBHOOK_URL = os.getenv('WEBHOOK_URL')
+TOKEN = os.getenv('7243199722:AAE0Fl7E0k0XEXjPqwK_hu3YqMSapMKq1IU')
+WEBHOOK_URL = os.getenv('https://asian-bot.onrender.com')
 PORT = int(os.getenv('PORT', 5000))
 
 if not TOKEN:
