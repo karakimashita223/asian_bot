@@ -118,18 +118,12 @@ def handle_photo(message):
 
 load_phrases()
 
-@app.route('/' + TOKEN, methods=['POST'])
-def get_message():
-    json_str = request.get_data().decode('UTF-8')
-    update = types.Update.de_json(json_str)
-    bot.process_new_updates([update])
-    return '!', 200
-
 @app.route('/')
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url=WEBHOOK_URL + TOKEN)
-    return '!', 200
+def index():
+    return "Alive"
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=PORT)
+def run():
+    app.run(host='0.0.0.0', port=8080)
+
+
+bot.polling(non_stop=True, interval=0)
