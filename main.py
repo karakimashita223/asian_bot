@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 
 TOKEN = '7243199722:AAGe25Bmfy325_uECrZEVejBrbC7pFHTeSU'
 BOT_USERNAME = 'asian_everyday_bot'
-WEBHOOK_URL = os.getenv('https://asian-bot.onrender.com')
+WEBHOOK_URL = os.getenv('https://api.render.com/deploy/srv-cpnj7odds78s73b1v1cg?key=y1XrxDjCcy8')
 PORT = int(os.getenv('PORT', 4000))
 
 bot = TeleBot(TOKEN)
