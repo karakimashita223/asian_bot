@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from keep_alive import keep_alive
 keep_alive()
 
-TOKEN = '7243199722:AAH77BCLG3na85KB0sE-fTcFgIcPCL_SQ8o'
+TOKEN = '7243199722:AAGZzgMxnlC0uMBWFs5ML-M2Ce-2Q0AyeGI'
 BOT_USERNAME = 'asian_everyday_bot'
 
 bot = TeleBot(TOKEN)
