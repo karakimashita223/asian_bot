@@ -5,8 +5,7 @@ import schedule
 import time
 import threading
 from datetime import datetime, timedelta
-from keep_alive import keep_alive
-keep_alive()
+
 
 TOKEN = '7243199722:AAE0Fl7E0k0XEXjPqwK_hu3YqMSapMKq1IU'
 BOT_USERNAME = 'asian_everyday_bot'
