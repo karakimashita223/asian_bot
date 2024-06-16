@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 
 
-TOKEN = '7243199722:AAGe25Bmfy325_uECrZEVejBrbC7pFHTeSU'
+TOKEN = '7243199722:AAF8oO0algkwQ450cT4aXvQ_2RLsD2sTdIs'
 BOT_USERNAME = 'asian_everyday_bot'
 
 bot = TeleBot(TOKEN)
