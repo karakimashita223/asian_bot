@@ -61,8 +61,8 @@ def send_random_image():
 def schedule_next_image():
     schedule.clear('daily-task')
 
-    random_hour = random.randint(7, 7)
-    random_minute = random.randint(20, 40)
+    random_hour = random.randint(8, 8)
+    random_minute = random.randint(0, 59)
 
     now = datetime.now()
     next_time = now.replace(hour=random_hour, minute=random_minute, second=0, microsecond=0)
@@ -72,7 +72,7 @@ def schedule_next_image():
 
     schedule_time_str = next_time.strftime("%H:%M")
     schedule.every().day.at(schedule_time_str).do(send_random_image).tag('daily-task')
-
+    bot.send_message(scheduled_chat_id, f"Следующая картинка будет отправлена в {schedule_time_str}.")
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
