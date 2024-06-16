@@ -5,9 +5,6 @@ import schedule
 import time
 import threading
 from datetime import datetime, timedelta
-from keep_alive import keep_alive
-keep_alive()
-
 
 TOKEN = '7243199722:AAEPVoQrwEPaQgbqKUaFwicJbN_xhBXPHOU'
 BOT_USERNAME = 'asian_everyday_bot'
@@ -61,7 +58,7 @@ def send_random_image():
 def schedule_next_image():
     schedule.clear('daily-task')
 
-    random_hour = random.randint(8, 8)
+    random_hour = random.randint(6, 6)
     random_minute = random.randint(0, 59)
 
     now = datetime.now()
