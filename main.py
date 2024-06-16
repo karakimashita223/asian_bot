@@ -1,17 +1,20 @@
-from telebot import TeleBot
+from flask import Flask, request
+from telebot import TeleBot, types
 import os
 import random
 import schedule
 import time
 import threading
 from datetime import datetime, timedelta
-from keep_alive import keep_alive
-keep_alive()
+
 
 TOKEN = '7243199722:AAGe25Bmfy325_uECrZEVejBrbC7pFHTeSU'
 BOT_USERNAME = 'asian_everyday_bot'
+WEBHOOK_URL = os.getenv('https://asian-bot.onrender.comL')
+PORT = int(os.getenv('PORT', 4000))
 
 bot = TeleBot(TOKEN)
+app = Flask(__name__)
 
 IMAGES_FOLDER = "images"
 TEXT_FILE = "phrases.txt"
@@ -115,4 +118,18 @@ def handle_photo(message):
 
 load_phrases()
 
-bot.polling(non_stop=True, interval=0)
+@app.route('/' + TOKEN, methods=['POST'])
+def get_message():
+    json_str = request.get_data().decode('UTF-8')
+    update = types.Update.de_json(json_str)
+    bot.process_new_updates([update])
+    return '!', 200
+
+@app.route('/')
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url=WEBHOOK_URL + TOKEN)
+    return '!', 200
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=PORT)
