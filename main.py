@@ -81,6 +81,7 @@ def send_welcome(message):
             global scheduled_chat_id
             scheduled_chat_id = message.chat.id
             bot.reply_to(message, "Починаю постити дівок❤️")
+            bot.send_message(scheduled_chat_id, f"Следующая картинка будет отправлена в {schedule_time_str}.")
             schedule_next_image()
         else:
             bot.reply_to(message, "ідінахуй @username.")
