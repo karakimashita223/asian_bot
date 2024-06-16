@@ -58,7 +58,7 @@ def send_random_image():
 def schedule_next_image():
     schedule.clear('daily-task')
 
-    random_hour = random.randint(6, 6)
+    random_hour = random.randint(7, 7)
     random_minute = random.randint(20, 40)
 
     now = datetime.now()
