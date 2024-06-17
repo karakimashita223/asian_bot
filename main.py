@@ -84,7 +84,7 @@ def schedule_next_image():
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     if message.from_user.id == MY_USER_ID:
-        if f"@{bot.get_me().username}" in message.text or message.chat.type == 'private':
+        if f"@{BOT_USERNAME}" in message.text or message.chat.type == 'private':
             global scheduled_chat_id
             scheduled_chat_id = message.chat.id
             bot.reply_to(message, "Бот запущен и будет отправлять случайные картинки с фразами раз в сутки в случайное время.")
