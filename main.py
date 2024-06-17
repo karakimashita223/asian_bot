@@ -122,7 +122,7 @@ def handle_photo(message):
 
 load_phrases()
 
-@app.route('/7243199722:AAF8oO0algkwQ450cT4aXvQ_2RLsD2sTdIs', methods=['POST'])
+@app.route('/' + TOKEN, methods=['POST'])
 def get_message():
     json_str = request.get_data().decode('UTF-8')
     update = types.Update.de_json(json_str)
