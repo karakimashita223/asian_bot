@@ -110,8 +110,6 @@ def handle_photo(message):
             new_file.write(downloaded_file)
         
         bot.reply_to(message, f"Збереженно як {file_name}")
-    else:
-        bot.reply_to(message, "Вибачте, але я зберігаю картинки лише від свого хазяїна")
 
 load_phrases()
 
