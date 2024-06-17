@@ -58,7 +58,7 @@ def send_random_image():
         else:
             print("scheduled_chat_id is None, no message will be sent.")
     except Exception as e:
-        print(f"Ошибка при отправке изображения: {e}")
+        print(f"Помилка: {e}")
 
 def schedule_next_image():
     schedule.clear('daily-task')
@@ -112,7 +112,7 @@ def handle_photo(message):
         
         bot.reply_to(message, f"Збереженно як {file_name}")
     else:
-        bot.reply_to(message, "Вибачте, але я можу зберігати дівок лише від свего хазяїна".")
+        bot.reply_to(message, "Вибачте, але я можу зберігати дівок лише від свего хазяїна")
 
 load_phrases()
 
