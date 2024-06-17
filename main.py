@@ -23,18 +23,14 @@ phrases = []
 MY_USER_ID = 1355121335
 scheduled_chat_id = MY_USER_ID
 
-# Создание папки для изображений, если её нет
 if not os.path.exists(IMAGES_FOLDER):
     os.makedirs(IMAGES_FOLDER)
 
-# Загрузка фраз из текстового файла
 def load_phrases():
     global phrases
     if os.path.exists(TEXT_FILE):
         with open(TEXT_FILE, 'r', encoding='utf-8') as file:
             phrases = [line.strip() for line in file.readlines()]
-    else:
-        phrases = ["Фразы не найдены. Пожалуйста, добавьте фразы в файл phrases.txt."]
 
 def send_random_image():
     global scheduled_chat_id
@@ -58,7 +54,7 @@ def send_random_image():
                 
                 schedule_next_image()
             else:
-                bot.send_message(scheduled_chat_id, "Все доступные изображения уже были отправлены.")
+                bot.send_message(scheduled_chat_id, "Нажадь всі дівки закінчились")
         else:
             print("scheduled_chat_id is None, no message will be sent.")
     except Exception as e:
@@ -78,8 +74,6 @@ def schedule_next_image():
 
     schedule_time_str = next_time.strftime("%H:%M")
     schedule.every().day.at(schedule_time_str).do(send_random_image).tag('daily-task')
-    
-    bot.send_message(scheduled_chat_id, f"Следующая картинка будет отправлена в {schedule_time_str}.")
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -87,12 +81,12 @@ def send_welcome(message):
         if f"@{BOT_USERNAME}" in message.text or message.chat.type == 'private':
             global scheduled_chat_id
             scheduled_chat_id = message.chat.id
-            bot.reply_to(message, "Бот запущен и будет отправлять случайные картинки с фразами раз в сутки в случайное время.")
+            bot.reply_to(message, "Починаю постити дівок")
             schedule_next_image()
         else:
-            bot.reply_to(message, "Пожалуйста, укажите бота через @username.")
+            bot.reply_to(message, "ідінахуй")
     else:
-        bot.reply_to(message, "Извините, вы не авторизованы для использования этой команды.")
+        bot.reply_to(message, "Вибачте, але я слухаю команди лише від свого хазяїна")
 
 def run_schedule():
     while True:
@@ -116,9 +110,9 @@ def handle_photo(message):
         with open(file_path, 'wb') as new_file:
             new_file.write(downloaded_file)
         
-        bot.reply_to(message, f"Картинка сохранена как {file_name}")
+        bot.reply_to(message, f"Збереженно як {file_name}")
     else:
-        bot.reply_to(message, "Извините, я могу сохранять картинки только от определенного пользователя в личном чате.")
+        bot.reply_to(message, "Вибачте, але я можу зберігати дівок лише від свего хазяїна".")
 
 load_phrases()
 
