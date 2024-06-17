@@ -8,6 +8,7 @@ import schedule
 from datetime import datetime, timedelta
 
 TOKEN = os.getenv('7243199722:AAF8oO0algkwQ450cT4aXvQ_2RLsD2sTdIs')
+WEBHOOK_URL = os.getenv('https://api.render.com/deploy/srv-cpnsodmehbks738d1990?key=f-dfMONgB18')
 PORT = int(os.getenv('PORT', 5000))
 
 bot = TeleBot(TOKEN)
@@ -126,6 +127,12 @@ def get_message():
     json_str = request.get_data().decode('UTF-8')
     update = types.Update.de_json(json_str)
     bot.process_new_updates([update])
+    return '!', 200
+
+@app.route('/')
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url=WEBHOOK_URL + TOKEN)
     return '!', 200
 
 if __name__ == "__main__":
