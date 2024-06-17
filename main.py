@@ -7,8 +7,8 @@ import time
 import schedule
 from datetime import datetime, timedelta
 
-TOKEN = os.getenv('7243199722:AAF8oO0algkwQ450cT4aXvQ_2RLsD2sTdIs')
-WEBHOOK_URL = os.getenv('https://api.render.com/deploy/srv-cpnsodmehbks738d1990?key=f-dfMONgB18')
+TOKEN = os.getenv('TELEGRAM_TOKEN')
+WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 PORT = int(os.getenv('PORT', 5000))
 
 bot = TeleBot(TOKEN)
