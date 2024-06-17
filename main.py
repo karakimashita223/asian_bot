@@ -1,18 +1,17 @@
-from flask import Flask, request
-from telebot import TeleBot, types
+from telebot import TeleBot
 import os
 import random
-import threading
-import time
 import schedule
+import time
+import threading
 from datetime import datetime, timedelta
+from keep_alive import keep_alive
+keep_alive()
 
-TOKEN = os.getenv('TELEGRAM_TOKEN')
-WEBHOOK_URL = os.getenv('WEBHOOK_URL')
-PORT = int(os.getenv('PORT', 5000))
+TOKEN = '7243199722:AAF8oO0algkwQ450cT4aXvQ_2RLsD2sTdIs'
+BOT_USERNAME = 'asian_everyday_bot'  
 
 bot = TeleBot(TOKEN)
-app = Flask(__name__)
 
 IMAGES_FOLDER = "images"
 TEXT_FILE = "phrases.txt"
@@ -20,11 +19,9 @@ TEXT_FILE = "phrases.txt"
 sent_images = set()
 phrases = []
 
-MY_USER_ID = 1355121335
-scheduled_chat_id = MY_USER_ID
+MY_USER_ID = 1355121335  
+scheduled_chat_id = None
 
-if not os.path.exists(IMAGES_FOLDER):
-    os.makedirs(IMAGES_FOLDER)
 
 def load_phrases():
     global phrases
@@ -37,10 +34,12 @@ def send_random_image():
     try:
         if scheduled_chat_id is not None:
             images = os.listdir(IMAGES_FOLDER)
+            
             images = [img for img in images if img.endswith(('jpg', 'jpeg', 'png', 'gif')) and img not in sent_images]
             
             if images:
                 random_image = random.choice(images)
+                
                 image_path = os.path.join(IMAGES_FOLDER, random_image)
                 
                 with open(image_path, 'rb') as image_file:
@@ -54,15 +53,14 @@ def send_random_image():
                 
                 schedule_next_image()
             else:
-                bot.send_message(scheduled_chat_id, "Нажадь всі дівки закінчились")
+                bot.send_message(scheduled_chat_id, "Нажаль всі дівки закінчились")
         else:
             print("scheduled_chat_id is None, no message will be sent.")
     except Exception as e:
-        print(f"Помилка: {e}")
+        print(f"Помилка {e}")
 
 def schedule_next_image():
     schedule.clear('daily-task')
-
     random_hour = random.randint(0, 23)
     random_minute = random.randint(0, 59)
 
@@ -86,7 +84,7 @@ def send_welcome(message):
         else:
             bot.reply_to(message, "ідінахуй")
     else:
-        bot.reply_to(message, "Вибачте, але я слухаю команди лише від свого хазяїна")
+        bot.reply_to(message, "Вибачте, але я виконю команди лишу від свого хазяїна")
 
 def run_schedule():
     while True:
@@ -102,6 +100,7 @@ def handle_photo(message):
         photo = message.photo[-1]
 
         file_info = bot.get_file(photo.file_id)
+        
         downloaded_file = bot.download_file(file_info.file_path)
                 
         file_name = f"{photo.file_id}.jpg"
@@ -112,22 +111,8 @@ def handle_photo(message):
         
         bot.reply_to(message, f"Збереженно як {file_name}")
     else:
-        bot.reply_to(message, "Вибачте, але я можу зберігати дівок лише від свего хазяїна")
+        bot.reply_to(message, "Вибачте, але я зберігаю картинки лише від свого хазяїна")
 
 load_phrases()
 
-@app.route('/' + TOKEN, methods=['POST'])
-def get_message():
-    json_str = request.get_data().decode('UTF-8')
-    update = types.Update.de_json(json_str)
-    bot.process_new_updates([update])
-    return '!', 200
-
-@app.route('/')
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url=WEBHOOK_URL + TOKEN)
-    return '!', 200
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=PORT)
+bot.polling(non_stop=True, interval=0)
