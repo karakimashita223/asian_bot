@@ -1,4 +1,4 @@
-from telebot import TeleBot
+from telebot import TeleBot, types
 import os
 import random
 import schedule
@@ -8,8 +8,8 @@ from datetime import datetime, timedelta
 from keep_alive import keep_alive
 keep_alive()
 
-TOKEN = '7243199722:AAFsuB3OrQG-bkOvMTOpUKYWTN0eASZN4po'
-BOT_USERNAME = 'asian_everyday_bot'  
+TOKEN = '7243199722:AAELQhWvAVazGxqI27B8Al6G3afUIVwLEdo'  # Вставьте сюда свой токен бота
+BOT_USERNAME = 'asian_everyday_bot'  # Вставьте сюда username вашего бота
 
 bot = TeleBot(TOKEN)
 
@@ -19,9 +19,9 @@ TEXT_FILE = "phrases.txt"
 sent_images = set()
 phrases = []
 
-MY_USER_ID = 1355121335  
+MY_USER_ID = 1355121335  # Ваш Telegram ID
 scheduled_chat_id = None
-
+scheduled_time = None
 
 def load_phrases():
     global phrases
@@ -39,7 +39,6 @@ def send_random_image():
             
             if images:
                 random_image = random.choice(images)
-                
                 image_path = os.path.join(IMAGES_FOLDER, random_image)
                 
                 with open(image_path, 'rb') as image_file:
@@ -53,7 +52,7 @@ def send_random_image():
                 
                 schedule_next_image()
             else:
-                bot.send_message(scheduled_chat_id, "Нажаль всі дівки закінчились")
+                bot.send_message(scheduled_chat_id, "Всі доступні зображення вже були відправлені.")
         else:
             print("scheduled_chat_id is None, no message will be sent.")
     except Exception as e:
@@ -61,17 +60,21 @@ def send_random_image():
 
 def schedule_next_image():
     schedule.clear('daily-task')
-    random_hour = random.randint(12, 12)
-    random_minute = random.randint(39, 46)
-
-    now = datetime.now()
-    next_time = now.replace(hour=random_hour, minute=random_minute, second=0, microsecond=0)
     
-    if next_time <= now:
-        next_time += timedelta(days=1)
+    if scheduled_time:
+        schedule.every().day.at(scheduled_time).do(send_random_image).tag('daily-task')
+    else:
+        random_hour = random.randint(0, 23)
+        random_minute = random.randint(0, 59)
 
-    schedule_time_str = next_time.strftime("%H:%M")
-    schedule.every().day.at(schedule_time_str).do(send_random_image).tag('daily-task')
+        now = datetime.now()
+        next_time = now.replace(hour=random_hour, minute=random_minute, second=0, microsecond=0)
+        
+        if next_time <= now:
+            next_time += timedelta(days=1)
+
+        schedule_time_str = next_time.strftime("%H:%M")
+        schedule.every().day.at(schedule_time_str).do(send_random_image).tag('daily-task')
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -79,12 +82,24 @@ def send_welcome(message):
         if f"@{BOT_USERNAME}" in message.text or message.chat.type == 'private':
             global scheduled_chat_id
             scheduled_chat_id = message.chat.id
-            bot.reply_to(message, "Починаю постити дівок")
+            bot.reply_to(message, "Починаю постити зображення.")
             schedule_next_image()
         else:
-            bot.reply_to(message, "ідінахуй")
+            bot.reply_to(message, "Ця команда доступна лише в приватному чаті.")
     else:
-        bot.reply_to(message, "Вибачте, але я виконю команди лишу від свого хазяїна")
+        bot.reply_to(message, "Вибачте, я виконую команди лише від свого власника.")
+
+@bot.message_handler(commands=['settime'])
+def set_time(message):
+    global scheduled_time
+    try:
+        time_str = message.text.split()[1]
+        time.strptime(time_str, '%H:%M')
+        scheduled_time = time_str
+        bot.reply_to(message, f"Час відправлення зображень встановлено на {time_str}.")
+        schedule_next_image()
+    except Exception as e:
+        bot.reply_to(message, "Помилка: Будь ласка, використовуйте правильний формат часу (HH:MM).")
 
 def run_schedule():
     while True:
@@ -109,7 +124,7 @@ def handle_photo(message):
         with open(file_path, 'wb') as new_file:
             new_file.write(downloaded_file)
         
-        bot.reply_to(message, f"Збереженно як {file_name}")
+        bot.reply_to(message, f"Зображення збережено як {file_name}")
 
 load_phrases()
 
